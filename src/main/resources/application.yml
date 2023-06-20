@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: 'jdbc:postgresql://localhost:5432/feverdb'
+    username: "userdb"
+    password: "passdb"
+    dbname: "feverdb"
+  docker:
+    compose:
+      file: "docker-compose.yml"
+      lifecycle-management: "start-and-stop"
+
+server:
+  port: 8000
+  compression:
+    enabled: true
+    mime-types: application/json
+
+app:
+  ms-provider-event.url: http://localhost:${wiremock.server.port}
+  ms-provider-event.user: guestuser
+  ms-provider-event.password: guestuser
+
+wiremock:
+  server:
+    port: 8090
+
+# swagger http://localhost:8000/swagger-ui/index.html#/

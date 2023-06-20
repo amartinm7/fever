@@ -1,87 +1,225 @@
 # Fever code challenge
 
-Hello! Glad you are on this step of the process. We would like to see how you are doing while coding and this exercise
-tries to be a simplified example of something we do on our daily basis.
+## References
 
-At Fever we work to bring experiences to people. We have a marketplace of events from different providers that are
-curated and then consumed by multiple applications. We work hard to expand the range of experiences we offer to our customers.
-Consequently, we are continuosly looking for new providers with great events to integrate in our platforms. 
-In this challenge, you will have to set up a simple integration with one of those providers to offer new events to our users.
+[Kotlin docs](https://kotlinlang.org/docs/home.html)
 
-Even if this is just a disposable test, imagine when coding that somebody will pick up this code an maintain it on
-the future. It will be evolved, adding new features, adapting existent ones, or even removing unnecessary functionalities.
-So this should be conceived as a long term project, not just one-off code.
+[Springboot-3 guide](https://docs.spring.io/spring-boot/docs/3.1.0-SNAPSHOT/reference/html/features.html#features.spring-application)
 
-## Evaluation
-We will value the solution as a whole, but some points that we must special attention are:
-- How the proposed solution matches the given problem.
-- Code style.
-- Consistency across the codebase.
-- Software architecture proposed to solve the problem.
-- Documentation about decisions you made.
+## Build & Run the app
 
-## Tooling
-- Use Python 3 unless something different has been told.
-- You can use any library, framework or tool that you think are the best for the job.
-- To provide your code, use the master branch of this repository.
+build and execute the app
+```bash
+./gradlew clean build bootRun
+```
 
-## Description
-We have an external provider that gives us some events from their company, and we want to integrate them on the Fever
-marketplace, in order to do that, we are developing this microservice.
+stop the app
+```bash
+./gradlew -stop
+```
 
-##### External provider service
-The provider will have one endpoint:
+![gradle_bootrun](_doc/_img/gradle_bootrun.jpg)
 
-https://provider.code-challenge.feverup.com/api/events
+as it's configured, gradle build the app, run all the tests and starts the app with the `docker-compose.yml` config behind.
 
-Where they will give us their list of events on XML. Every time we fetch the events,
-the endpoint will give us the current events available on their side. Here we provide some examples of three different
-calls to that endpoint on three different consecutive moments.
+### Friendly Reminder
 
-Response 1
-https://gist.githubusercontent.com/sergio-nespral/82879974d30ddbdc47989c34c8b2b5ed/raw/44785ca73a62694583eb3efa0757db3c1e5292b1/response_1.xml
+Remember to clean the docker executions after and before to run the app in order 
+to don't have any conflict with the port of the services
 
-Response 2
-https://gist.githubusercontent.com/sergio-nespral/82879974d30ddbdc47989c34c8b2b5ed/raw/44785ca73a62694583eb3efa0757db3c1e5292b1/response_2.xml
+You can see the docker executions
+```bash
+docker ps -a -q
+```
 
-Response 3
-https://gist.githubusercontent.com/sergio-nespral/82879974d30ddbdc47989c34c8b2b5ed/raw/44785ca73a62694583eb3efa0757db3c1e5292b1/response_3.xml
+You can stop all the executions
+```bash
+docker rm -f $(docker ps -a -q)
+```
 
-As you can see, the events that aren't available anymore aren't shown on their API anymore.
+Maybe you have the 8000 http port occupied. Check it: 
 
-##### What we need to develop
-Our mission is to develop and expose just one endpoint, and should respect the following Open API spec, with
-the formatted and normalized data from the external provider:
-https://app.swaggerhub.com/apis-docs/luis-pintado-feverup/backend-test/1.0.0
+```bash
+lsof -i:8000
+```
 
-This endpoint should accept a "starts_at" and "ends_at" param, and return only the events within this time range.
-- It should only return the events that were available at some point in the provider's endpoint(the sell mode was online, the rest should be ignored)
-- We should be able to request this endpoint and get events from the past (events that came in previous API calls to the provider service since we have the app running) and the future.
-- The endpoint should be fast in hundred of ms magnitude order, regardless of the state of other external services. For instance, if the external provider service is down, our search endpoint should still work as usual.
+and if the port if been used, you can kill the process if it's needed
+```bash
+sudo kill -9 pid
+```
 
-Example: If we deploy our application on 2021-02-01, and we request the events from 2021-02-01 to 2022-07-03, we should
-see in our endpoint the events 291, 322 and 1591 with their latest known values. 
+generate the gradlew command if you don't have it in the project.
 
-## Requirements
-- The service should be as resource and time efficient as possible.
-- The Open API specification should be respected.
-- Use PEP8 guidelines for the formatting
-- Add a README file that includes any considerations or important decision you made.
-- If able, add a Makefile with a target named `run` that will do everything that is needed to run the application.
+```bash
+gradle wrapper
+```
 
-## The extra mile
-With the mentioned above we can have a pretty solid application. Still we would like to know your opinion, either 
-directly coded (if you want to invest the time) or explained on a README file about how to scale this application
-to focus on performance. The examples are small for the sake of the test, but imagine that those files contains
-thousands of events with hundreds of zones each. Also consider, that this endpoint developed by us, will have peaks
-of traffic between 5k/10k request per second.
+## Swagger: endpoint documentation
 
-## Feedback
-If you have any questions about the test you can contact us, we will try to reply as soon as possible.
+The next step is checkout the exposed endpoints. 
 
-In Fever, we really appreciate your interest and time. We are constantly looking for ways to improve our selection processes,
-our code challenges and how we evaluate them. Hence, we would like to ask you to fill the following (very short) form:
+To do that, click on the [swagger](http://localhost:8000/swagger-ui/index.html#/) link to visit the swagger documentation
 
-https://forms.gle/6NdDApby6p3hHsWp8
+![swagger](_doc/_img/swagger.jpg)
 
-Thank you very much for participating!
+## Testing endpoint via curl
+
+```bash
+curl -X 'GET' 'http://localhost:8000/search?starts_at=2021-06-17T14:18:29Z&ends_at=2023-07-17T14:18:29Z' -H 'accept: application/json'
+```
+
+or the same but with pretty print
+
+```bash
+curl -X 'GET' 'http://localhost:8000/search?starts_at=2021-06-17T14:18:29Z&ends_at=2023-07-17T14:18:29Z' -H 'accept: application/json' | json_pp  
+```
+
+You can find the `scr\test\resources\curl_testing.http` file to do the same using the intellij IDE.
+
+![curl](_doc/_img/curl.jpg)
+
+## Docker image and docker-compose
+
+If you want to deploy the application into a docker container you can use the 
+the docker_build.sh script to create the fever app docker image.
+
+```bash
+sh ./docker_build.sh
+```
+
+After that you can run the docker-compose to rise the remaining infrastructure: wiremock (as events external provider) 
+and the postgres database (to persistence). To do that, you can execute the next command: 
+
+```bash
+# hides the logs
+docker-compose up -d
+# or this, to see the logs
+docker-compose up 
+```
+
+Once done, you can execute the next command to execute the app inside the docker network with the previous infrastructure running
+
+```bash
+sh ./docker_run.sh
+```
+
+![fever_console](_doc/_img/fever_console.jpg)
+
+
+![docker-console](_doc/_img/docker-compose.jpg)
+
+
+Execute the endpoint or swagger to test the app (explained in the previous paragraph)
+
+- Get events
+
+![curl_executions](_doc/_img/curl_execution.jpg)
+
+- Bad request
+
+![curl_error_400](_doc/_img/curl_error_400.jpg)
+
+- Not found events
+
+![curl_error_404](_doc/_img/curl_error_404.jpg)
+
+### Another Docker-compose alternative
+
+You can run rightly the `docker-compose-all.yml`, and you will have everything running.
+The same as previously explained.
+
+```bash
+docker-compose -f docker-compose-all.yml up -d
+````
+
+### Wiremock and events external provider
+
+I have used the wiremock server to emulate the external provider. 
+So when you call to wiremock, it response you with an XML document with the events. 
+It's a way to mock the external dependencies in a project.
+
+- mappings http://localhost:8090/__admin/mappings
+
+![wiremock_mappings](_doc/_img/wiremock_mappings.jpg)
+
+## Troubleshooting
+
+Sometimes the app is not running well, or when we execute the `./gradlew clean build` command, the app can show errors 
+in the tests.
+
+Sometimes the problems can be related with the docker executions.
+
+- Check the docker process and kill all of them: 
+
+```bash
+docker rm -f $(docker ps -a -q)
+```
+
+- check the opened ports: `8000, 8090 y 5432` of our servers, and kill all of them:
+
+```bash 
+# list the process consuming the resources for the next ports
+lsof -i: 8000
+lsof -i: 8090
+lsof -i: 5432
+
+# kill the process
+sudo kill -9 pid
+```
+
+- stop the gradle executions:
+
+```bash 
+./gradlew -stop
+```
+
+- remove the docker fever image: 
+
+```bash
+docker rmi ms-fever
+```
+
+Once done, try to do `./gradlew clean build` and you can see if everything is alright
+
+## Performance notes
+
+You can deploy the app on kubernetes and measure the performance doing some stress test to know how many request can accept per second.
+To do that you can use, jmeter to execute a burst of requests and see the response. Using datadog o graphana can help to
+the graphics of the service, to see the health.
+
+Deploying in two clusters of some instances of the microservices, with load balancers, increase the performance and the stability of the system.
+
+In any case, to achieve the 5K request per second, we can set up kubernetes to ask as many service instances as we need to
+consume all this traffic. It's no a scientist method, it's more about to tune the cluster.  
+Kubernetes can adapt the number of instances of the microservice as we need depending on the traffic, adding stopping or adding new ones.
+(`horizontal scaling`)
+
+The infrastructure behind affects on the performance too. It depends on the AWS families in which microservices are running.
+As better and expensive is the family, more request per second you will have: more IOPS and more data store space.
+
+This applies too to the database, which can a bottleneck in your system if you don't tune it well.
+If you size with not enough , after that, if the system needs more, you can increase it on demand (`vertical scaling`).
+
+So sometimes to evaluate if a microservice performs or not performs for your needs, depends on how is
+deployed in your infrastructure system.
+
+## Next Steps, evolving the app
+
+I would like to add more features as
+
+- [circuit breaker](https://spring.io/guides/gs/cloud-circuit-breaker/), to handle the load of the application in the case of communication errors or similar
+- `cache`, as ideas to improve the system, I can image a local cache in to the microservice with 10 min TTL's or similar, 
+and/or another piece of infrastructure to cache the requests to avoid call to the microservice with 10 min TTL's or similar,... 
+- `moving to mono and flux reactive programming` to improve the performance
+- `observability` (metrics and tracing) to see the behaviour of the app
+- `CD/CI pipeline` to enable travis or github-actions, to run the continuous integration and the continuous deployment in a server.
+
+  ...
+
+### Final thoughts
+
+I'm happy for being participated in this challenge.
+I have learnt a lot, and I've enjoyed it so much.
+Thank you for giving me the opportunity to do it.
+
+:)

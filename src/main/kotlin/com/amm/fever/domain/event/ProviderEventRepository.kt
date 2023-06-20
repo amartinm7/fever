@@ -1,0 +1,9 @@
+package com.amm.fever.domain.event
+
+import java.time.OffsetDateTime
+
+interface ProviderEventRepository: ProviderEventReadRepository
+
+interface ProviderEventReadRepository {
+    fun findBy(startsAt: OffsetDateTime, endsAt: OffsetDateTime): List<Event>
+}

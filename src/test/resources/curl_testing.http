@@ -1,0 +1,61 @@
+### CURL manual testing
+
+### GET a events between two dates
+# @name get events
+GET http://localhost:8000/search?starts_at=2021-06-30T21:00:00Z&ends_at=2022-07-17T14:18:29Z
+Content-Type: application/json
+
+### GET a events in an hour
+# @name get events
+GET http://localhost:8000/search?starts_at=2021-06-30T21:00:00Z&ends_at=2021-06-30T22:00:00Z
+Content-Type: application/json
+
+### GET return 400 Required parameter 'ends_at' is not present
+# @name get events
+GET http://localhost:8000/search?starts_at=2022-06-17T14:18:29Z
+Content-Type: application/json
+
+### Response when bad request, missing parameter
+#{
+#  "data": null,
+#  "error": {
+#    "code": "400",
+#    "message": "Required parameter 'ends_at' is not present"
+#  }
+#}
+###
+
+
+### GET not found
+# @name get events
+GET http://localhost:8000/search?starts_at=2023-06-30T21:00:00Z&ends_at=2023-06-30T22:00:00Z
+Content-Type: application/json
+
+### WIREMOCK to check stubs/responses
+
+### GET Wiremock mappings
+GET http://localhost:8090/__admin/mappings
+Content-Type: application/json
+
+### GET events for extenal provide
+# @name GET events for extenal provide
+GET http://localhost:8090/v1/events
+Content-Type: application/xml
+
+#
+# swagger http://localhost:8000/swagger-ui/index.html#/
+#
+
+### GET a actuator
+# @name actuator
+GET http://localhost:8000/actuator
+Content-Type: application/json
+
+### GET a health check
+# @name health check
+GET http://localhost:8000/actuator/health
+Content-Type: application/json
+
+### GET a health check of a path
+# @name health check
+http://localhost:8000/actuator/health/{*path}

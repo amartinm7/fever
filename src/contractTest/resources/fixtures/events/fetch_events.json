@@ -1,0 +1,17 @@
+{
+  "data": {
+    "events": [
+      {
+        "id": "3deab62e-2fe2-4f30-aede-96484fa3f738",
+        "title": "Los Morancos",
+        "start_date": "2021-07-31",
+        "start_time": "20:00:00",
+        "end_date": "2021-07-31",
+        "end_time": "21:00:00",
+        "min_price": 65.0,
+        "max_price": 75.0
+      }
+    ]
+  },
+  "error": null
+}

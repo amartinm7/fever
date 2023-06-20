@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: 'jdbc:postgresql://database:5432/feverdb'
+    username: "userdb"
+    password: "passdb"
+    dbname: "feverdb"
+
+app:
+  ms-provider-event.url: https://provider.code-challenge.feverup.com
+  ms-provider-event.user: feveruser
+  ms-provider-event.password: feverpass
