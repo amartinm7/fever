@@ -4,6 +4,7 @@ import com.amm.fever.domain.event.Event
 import com.amm.fever.domain.event.EventRepository
 import com.amm.fever.domain.event.ProviderEventRepository
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
 import java.time.OffsetDateTime
 
@@ -13,13 +14,26 @@ class SearchEventService(
 ) {
 
     fun execute(request: SearchEventServiceRequest): SearchEventServiceResponse {
-        val providerEvents: List<Event> =
-            providerEventRepository.findBy(startsAt = request.startsAt, endsAt = request.endsAt)
-                .emitCommandEvent()
-                .filterByDates(startsAt = request.startsAt, endsAt = request.endsAt)
-        val events: List<Event> = eventRepository.findBy(startsAt = request.startsAt, endsAt = request.endsAt)
-        return SearchEventServiceResponse(data = providerEvents merge events)
+        val providerEventFlux = Flux.defer {
+            Flux.fromIterable(findEventsFromExtProviderBy(request.startsAt, request.endsAt))
+        }
+
+        val eventFlux = Flux.defer {
+            Flux.fromIterable(eventRepository.findBy(request.startsAt, request.endsAt))
+        }
+
+        val asyncRequests = Mono.zip(providerEventFlux.collectList(), eventFlux.collectList())
+
+        return asyncRequests.flatMap { tuple ->
+            Mono.just(SearchEventServiceResponse(tuple.t1 merge tuple.t2))
+        }.block()!!
     }
+
+    private fun findEventsFromExtProviderBy(startsAt: OffsetDateTime, endsAt: OffsetDateTime): List<Event> =
+        providerEventRepository.findBy(startsAt = startsAt, endsAt = endsAt)
+            .emitCommandEvent()
+            .filterByDates(startsAt = startsAt, endsAt = endsAt)
+
 
     // creates a map with key providerId and value the event for every List<event>
     // after that, merges the two maps replacing or adding new entries over the first map
