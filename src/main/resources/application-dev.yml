@@ -9,3 +9,8 @@ app:
   ms-provider-event.url: http://wiremock:8090
   ms-provider-event.user: guestuser
   ms-provider-event.password: guestuser
+
+management:
+  zipkin:
+    tracing:
+      endpoint: "zipkin:9411"

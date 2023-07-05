@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: fever
   datasource:
     driverClassName: org.postgresql.Driver
     url: 'jdbc:postgresql://localhost:5432/feverdb'
@@ -26,3 +28,19 @@ wiremock:
     port: 8090
 
 # swagger http://localhost:8000/swagger-ui/index.html#/
+
+management:
+  zipkin:
+    tracing:
+      endpoint: "zipkin:9411"
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  tracing:
+    sampling:
+      probability: 1.0
+
+logging:
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'

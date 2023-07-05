@@ -21,5 +21,11 @@ services:
       - ./src/testFixtures/resources/wiremock/mappings/event/response:/./home/wiremock/__files/
     networks:
       - fever-network
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
+    networks:
+      - fever-network
 networks:
   fever-network: {}

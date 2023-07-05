@@ -12,7 +12,7 @@ import java.time.OffsetDateTime
 
 class SearchEventService(
     private val eventRepository: EventRepository,
-    private val providerEventRepository: ProviderEventRepository
+    private val providerEventRepository: ProviderEventRepository,
 ) {
 
     suspend fun execute(request: SearchEventServiceRequest): SearchEventServiceResponse {
@@ -24,7 +24,6 @@ class SearchEventService(
             val eventFlux: Deferred<List<Event>> = async {
                 eventRepository.findBy(request.startsAt, request.endsAt)
             }
-
             return@coroutineScope SearchEventServiceResponse(providerEventFlux.await() merge eventFlux.await())
         }
     }
