@@ -9,6 +9,7 @@ import com.amm.fever.event.PerformanceEventFixtures.ANY_START_DATE
 import com.amm.fever.infrastructure.SpringBootIntegrationTest
 import com.amm.fever.infrastructure.framework.event.repository.extprovider.ExtProviderEventRepository
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 

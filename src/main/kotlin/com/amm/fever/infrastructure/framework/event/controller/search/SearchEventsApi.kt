@@ -37,7 +37,7 @@ class SearchEventsApi(
         try {
             searchEventService.execute(
                 SearchEventServiceRequest(startsAt = startsAt, endsAt = endsAt)
-            ).toResponseEntity()
+            ).toResponseEntity().also { logger.info(">>> ${this.toString()}") }
         } catch (e: Exception) {
             INTERNAL_SERVER_ERROR_RESPONSE_ENTITY.also {
                 logger.error(e.toString())
