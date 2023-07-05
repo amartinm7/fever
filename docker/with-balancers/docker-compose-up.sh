@@ -21,7 +21,7 @@ sleep 30
 ## run one instances of the fever app
 docker-compose up -d --scale fever=1
 
-sleep 30
+sleep 180
 
 # Stop the execution of send_messages.sh script
 pkill -f "./send_messages.sh"
