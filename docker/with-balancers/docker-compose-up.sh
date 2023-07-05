@@ -3,6 +3,9 @@
 ## run three instances of the fever app
 docker-compose up -d --scale fever=3
 
+## run stats
+docker stats
+
 sleep 30
 
 ## send messages in background
