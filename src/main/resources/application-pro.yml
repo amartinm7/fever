@@ -9,3 +9,8 @@ app:
   ms-provider-event.url: https://provider.code-challenge.feverup.com
   ms-provider-event.user: feveruser
   ms-provider-event.password: feverpass
+
+management:
+  zipkin:
+    tracing:
+      endpoint: "zipkin:9411"

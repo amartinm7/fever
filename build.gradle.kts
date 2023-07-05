@@ -33,19 +33,31 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("io.reactivex.rxjava2:rxjava:2.2.21")
 	implementation("org.flywaydb:flyway-core")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3")
+	// reactive
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.2")
+	// observability
+	implementation("org.springframework.boot:spring-boot-starter-aop")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("io.micrometer:micrometer-tracing-bridge-brave")
+	implementation("io.zipkin.reporter2:zipkin-reporter-brave")
+//	implementation("io.micrometer:micrometer-tracing:1.1.2")
+//	implementation("io.micrometer:micrometer-tracing-bridge-otel:1.1.2")
+//	implementation("io.opentelemetry:opentelemetry-exporter-zipkin:1.27.0")
+	//
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose") // starts docker-compose in local to run the database
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+	// test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:4.0.3")
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")

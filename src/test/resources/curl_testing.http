@@ -5,6 +5,11 @@
 GET http://localhost:8000/search?starts_at=2021-06-30T21:00:00Z&ends_at=2022-07-17T14:18:29Z
 Content-Type: application/json
 
+### GET a events between two dates with loadbalancer
+# @name get events
+GET http://localhost:8080/search?starts_at=2021-06-30T21:00:00Z&ends_at=2022-07-17T14:18:29Z
+Content-Type: application/json
+
 ### GET a events in an hour
 # @name get events
 GET http://localhost:8000/search?starts_at=2021-06-30T21:00:00Z&ends_at=2021-06-30T22:00:00Z

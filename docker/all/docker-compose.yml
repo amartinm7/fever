@@ -17,8 +17,14 @@ services:
     ports:
       - "8090:8090"
     volumes:
-      - ./src/testFixtures/resources/wiremock/mappings/event/stubs:/./home/wiremock/mappings/
-      - ./src/testFixtures/resources/wiremock/mappings/event/response:/./home/wiremock/__files/
+      - ../../src/testFixtures/resources/wiremock/mappings/event/stubs:/./home/wiremock/mappings/
+      - ../../src/testFixtures/resources/wiremock/mappings/event/response:/./home/wiremock/__files/
+    networks:
+      - fever-network
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
     networks:
       - fever-network
   fever:
@@ -28,6 +34,8 @@ services:
       - "8000:8000"
     depends_on:
       - database
+      - wiremock
+      - zipkin
     networks:
       - fever-network
 networks:

@@ -12,14 +12,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.client.WebClient
-import java.time.OffsetDateTime
 
 @Configuration
 class EventConfig {
     @Bean
     fun searchEventService(
         eventRepository: EventRepository,
-        providerEventRepository: ProviderEventRepository
+        providerEventRepository: ProviderEventRepository,
     ) = SearchEventService(eventRepository, providerEventRepository)
 
     @Bean
