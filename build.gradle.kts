@@ -38,10 +38,12 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("io.reactivex.rxjava2:rxjava:2.2.21")
 	implementation("org.flywaydb:flyway-core")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.2")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose") // starts docker-compose in local to run the database
 	runtimeOnly("org.postgresql:postgresql")

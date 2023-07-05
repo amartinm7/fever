@@ -38,6 +38,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.awaitBody
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
@@ -55,15 +57,15 @@ class ExtProviderEventRepository(
     private val is5XX = { statusCode: HttpStatusCode -> statusCode.is5xxServerError }
     private val is4XX = { statusCode: HttpStatusCode -> statusCode.is4xxClientError }
 
-    override fun findBy(startsAt: OffsetDateTime, endsAt: OffsetDateTime): List<Event> =
+    override suspend fun findBy(startsAt: OffsetDateTime, endsAt: OffsetDateTime): List<Event> =
         eventExtProviderWebClient.get()
             .uri("/api/events")
             .retrieve()
             .onStatus(is5XX) { clientResponse -> clientResponse.toServerError() }
             .onStatus(is4XX) { clientResponse -> clientResponse.toClientError() }
-            .bodyToMono(EventListType::class.java)
+            // .bodyToMono(EventListType::class.java)
             // .retryBackoff(5, Duration.ofSeconds(1), Duration.ofSeconds(20))
-            .block()!!.toEvents()
+            .awaitBody<EventListType>().toEvents()
 
     private fun ClientResponse.toServerError() =
         Mono.error<EventCommunicationException>(

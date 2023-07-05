@@ -37,7 +37,7 @@ class JpaEventRepositoryTest {
     private lateinit var jpaEventRepository: JpaEventRepository
 
     @Test
-    fun `should return an event list given an start and end dates`() {
+    suspend fun `should return an event list given an start and end dates`() {
         //given
         `mock the findBy and returns a list of performance events`()
         `mock the objectMapper call and returns a JpaZones`()

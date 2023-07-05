@@ -26,7 +26,7 @@ interface SearchEventsApiInfo {
             description = "The request was not correctly formed (missing required parameters, wrong types...)"
         ), ApiResponse(responseCode = "500", description = "Generic error")]
     )
-    fun execute(
+    suspend fun execute(
         @Parameter(
             name = "starts_at",
             example = "2021-06-17T14:18:29Z",

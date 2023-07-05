@@ -17,12 +17,8 @@ class SearchEventsAcceptanceTest : SpringbootAcceptanceTest() {
 
     @BeforeEach
     fun setup() {
-        eventDatabaseSupport.createEvent()
-    }
-
-    @AfterEach
-    fun tearDown() {
         eventDatabaseSupport.deleteEvent()
+        eventDatabaseSupport.createEvent()
     }
 
     @Test

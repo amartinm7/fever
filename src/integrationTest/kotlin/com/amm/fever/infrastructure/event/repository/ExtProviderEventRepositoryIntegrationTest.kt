@@ -8,6 +8,7 @@ import com.amm.fever.event.PerformanceEventFixtures.ANY_END_DATE
 import com.amm.fever.event.PerformanceEventFixtures.ANY_START_DATE
 import com.amm.fever.infrastructure.SpringBootIntegrationTest
 import com.amm.fever.infrastructure.framework.event.repository.extprovider.ExtProviderEventRepository
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -17,7 +18,7 @@ class ExtProviderEventRepositoryIntegrationTest : SpringBootIntegrationTest() {
     private lateinit var providerEventRepository: ExtProviderEventRepository
 
     @Test
-    fun `should return a list of events`() {
+    fun `should return a list of events`() = runBlocking {
         val response: List<Event> = providerEventRepository.findBy(
             startsAt = ANY_START_DATE,
             endsAt = ANY_END_DATE

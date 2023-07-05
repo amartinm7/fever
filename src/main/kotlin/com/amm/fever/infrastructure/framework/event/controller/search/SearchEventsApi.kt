@@ -28,7 +28,7 @@ class SearchEventsApi(
     @GetMapping(
         path = ["/search"]
     )
-    override fun execute(
+    override suspend fun execute(
         @RequestParam(name = "starts_at", required = true)
         startsAt: OffsetDateTime,
         @RequestParam(name = "ends_at", required = true)

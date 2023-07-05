@@ -9,5 +9,5 @@ interface EventWriteRepository {
 }
 
 interface EventReadRepository {
-    fun findBy(startsAt: OffsetDateTime, endsAt: OffsetDateTime): List<Event>
+    suspend fun findBy(startsAt: OffsetDateTime, endsAt: OffsetDateTime): List<Event>
 }

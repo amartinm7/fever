@@ -52,18 +52,19 @@ class JpaEventRepository(
             //.also { println(">>> ${Thread.currentThread().name}") }
 
     private fun JpaEvent?.saveOrUpdate(event: Event): Event {
-        this?.let { jpaEvent -> event.toJpaEvent(jpaEvent.id).save() }
-            ?: event.toJpaEvent().save()
+        this?.let {
+            jpaEvent -> event.toJpaEvent(jpaEvent.id, jpaEvent.createdAt).save()
+        } ?: event.toJpaEvent().save()
         return event
     }
 
     private fun JpaEvent.save(): JpaEvent = jpaEventRepositoryClient.save(this)
 
-    override fun findBy(startsAt: OffsetDateTime, endsAt: OffsetDateTime): List<Event> {
+    override suspend fun findBy(startsAt: OffsetDateTime, endsAt: OffsetDateTime): List<Event> {
         return jpaEventRepositoryClient.findBy(startsAt = startsAt, endsAt = endsAt).toEvents()
     }
 
-    private fun Event.toJpaEvent(jpaId: UUID? = null) =
+    private fun Event.toJpaEvent(jpaId: UUID? = null, createdAt: OffsetDateTime? = null) =
         JpaEvent(
             id = jpaId ?: id.value,
             providerId = providerId.value,
@@ -78,7 +79,7 @@ class JpaEventRepository(
             zones = objectMapper.writeValueAsString(zones.toJpaZones()),
             minPrice = minPrice.value,
             maxPrice = maxPrice.value,
-            createdAt = audit.createdAt.value,
+            createdAt = createdAt ?: audit.createdAt.value,
             modifiedAt = audit.modifiedAt.value
         )
 

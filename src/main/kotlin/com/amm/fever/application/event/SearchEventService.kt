@@ -3,8 +3,10 @@ package com.amm.fever.application.event
 import com.amm.fever.domain.event.Event
 import com.amm.fever.domain.event.EventRepository
 import com.amm.fever.domain.event.ProviderEventRepository
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
 import java.time.OffsetDateTime
 
@@ -13,23 +15,21 @@ class SearchEventService(
     private val providerEventRepository: ProviderEventRepository
 ) {
 
-    fun execute(request: SearchEventServiceRequest): SearchEventServiceResponse {
-        val providerEventFlux = Flux.defer {
-            Flux.fromIterable(findEventsFromExtProviderBy(request.startsAt, request.endsAt))
+    suspend fun execute(request: SearchEventServiceRequest): SearchEventServiceResponse {
+        return coroutineScope {
+            val providerEventFlux: Deferred<List<Event>> = async {
+                findEventsFromExtProviderBy(request.startsAt, request.endsAt)
+            }
+
+            val eventFlux: Deferred<List<Event>> = async {
+                eventRepository.findBy(request.startsAt, request.endsAt)
+            }
+
+            return@coroutineScope SearchEventServiceResponse(providerEventFlux.await() merge eventFlux.await())
         }
-
-        val eventFlux = Flux.defer {
-            Flux.fromIterable(eventRepository.findBy(request.startsAt, request.endsAt))
-        }
-
-        val asyncRequests = Mono.zip(providerEventFlux.collectList(), eventFlux.collectList())
-
-        return asyncRequests.flatMap { tuple ->
-            Mono.just(SearchEventServiceResponse(tuple.t1 merge tuple.t2))
-        }.block()!!
     }
 
-    private fun findEventsFromExtProviderBy(startsAt: OffsetDateTime, endsAt: OffsetDateTime): List<Event> =
+    private suspend fun findEventsFromExtProviderBy(startsAt: OffsetDateTime, endsAt: OffsetDateTime): List<Event> =
         providerEventRepository.findBy(startsAt = startsAt, endsAt = endsAt)
             .emitCommandEvent()
             .filterByDates(startsAt = startsAt, endsAt = endsAt)

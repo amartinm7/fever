@@ -6,6 +6,12 @@
 
 [Springboot-3 guide](https://docs.spring.io/spring-boot/docs/3.1.0-SNAPSHOT/reference/html/features.html#features.spring-application)
 
+[Non-Blocking Spring Boot with Kotlin Coroutines](https://www.baeldung.com/kotlin/spring-boot-kotlin-coroutines)
+
+[Going Reactive with Spring, Coroutines and Kotlin Flow](https://spring.io/blog/2019/04/12/going-reactive-with-spring-coroutines-and-kotlin-flow)
+
+[Reactive or Coroutines: Between a rock and a hard place?](https://medium.com/digitalfrontiers/reactive-or-coroutines-between-a-rock-and-a-hard-place-6a41a151195a)
+
 ## Build & Run the app
 
 build and execute the app

@@ -17,6 +17,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus
@@ -32,7 +33,7 @@ class SearchEventsApiTest {
     private lateinit var searchEventsApi: SearchEventsApi
 
     @Test
-    fun `should return a valid list of events`() {
+    fun `should return a valid list of events`() = runBlocking {
         `mock the service call and returns a list of events`()
 
         val expectedResponse = ResponseEntity.ok(SearchApiResponse(error = null, data = ANY_EVENT_LIST))
@@ -40,11 +41,11 @@ class SearchEventsApiTest {
         val response: ResponseEntity<SearchApiResponse> =
             searchEventsApi.execute(startsAt = ANY_START_DATE, endsAt = ANY_END_DATE)
         assertThat(response).isEqualTo(expectedResponse)
-        verify(exactly = 1) { searchEventService.execute(ANY_SEARCH_EVENT_SERVICE_REQUEST) }
+        verify(exactly = 1) { runBlocking { searchEventService.execute(ANY_SEARCH_EVENT_SERVICE_REQUEST) } }
     }
 
     @Test
-    fun `should return a empty list of events`() {
+    fun `should return a empty list of events`() = runBlocking {
         `mock the service call and return an empty list of events`()
 
         val expectedResponse =
@@ -53,18 +54,22 @@ class SearchEventsApiTest {
         val response: ResponseEntity<SearchApiResponse> =
             searchEventsApi.execute(startsAt = ANY_START_DATE, endsAt = ANY_END_DATE)
         assertThat(response).isEqualTo(expectedResponse)
-        verify(exactly = 1) { searchEventService.execute(ANY_SEARCH_EVENT_SERVICE_REQUEST) }
+        verify(exactly = 1) { runBlocking { searchEventService.execute(ANY_SEARCH_EVENT_SERVICE_REQUEST) } }
     }
 
     private fun `mock the service call and returns a list of events`() {
         every {
-            searchEventService.execute(ANY_SEARCH_EVENT_SERVICE_REQUEST)
+            runBlocking {
+                searchEventService.execute(ANY_SEARCH_EVENT_SERVICE_REQUEST)
+            }
         } returns ANY_SEARCH_EVENT_SERVICE_RESPONSE
     }
 
     private fun `mock the service call and return an empty list of events`() {
         every {
-            searchEventService.execute(ANY_SEARCH_EVENT_SERVICE_REQUEST)
+            runBlocking {
+                searchEventService.execute(ANY_SEARCH_EVENT_SERVICE_REQUEST)
+            }
         } returns EMPTY_SEARCH_EVENT_SERVICE_RESPONSE
     }
 }
