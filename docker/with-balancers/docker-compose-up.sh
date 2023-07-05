@@ -27,4 +27,3 @@ pkill -f "./send_messages.sh"
 
 ## run three instances of the fever app
 docker-compose down
-
