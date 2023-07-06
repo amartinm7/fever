@@ -209,6 +209,26 @@ If you size with not enough , after that, if the system needs more, you can incr
 So sometimes to evaluate if a microservice performs or not performs for your needs, depends on how is
 deployed in your infrastructure system.
 
+### Zipkin: performance notes
+
+Once you run the app, you can see the containers running:
+
+![docker-compose-zipkin.jpg](_doc%2F_img%2Fdocker-compose-zipkin.jpg)
+
+Take a look on zipkin container, and open the next url:
+
+http://127.0.0.1:9411/zipkin/
+
+Here in this window you can check the request and the see the performance:
+
+![zipkin.jpg](_doc%2F_img%2Fzipkin.jpg)
+
+![zipkin-detail.jpg](_doc%2F_img%2Fzipkin-detail.jpg)
+
+As much you use the service the latency is decreasing. 
+
+`Outcomes`, the request back and forth takes over `40ms`, which is under the `200ms` as requirement on the assessment.
+
 ## Next Steps, evolving the app
 
 I would like to add more features as
