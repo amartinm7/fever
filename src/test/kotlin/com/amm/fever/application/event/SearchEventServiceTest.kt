@@ -58,9 +58,11 @@ class SearchEventServiceTest {
             }
         }
         verify(exactly = 1) {
-            eventRepository.save(
-                event = ANY_EVENTS[0]
-            )
+            runBlocking {
+                eventRepository.save(
+                    event = ANY_EVENTS[0]
+                )
+            }
         }
     }
 
@@ -103,7 +105,9 @@ class SearchEventServiceTest {
     private fun `mock saving gig event on repository`() {
         val event = GigEventFixtures.ANY_EVENTS[0]
         every {
-            eventRepository.save(event = event)
+            runBlocking {
+                eventRepository.save(event = event)
+            }
         } returns event
     }
 

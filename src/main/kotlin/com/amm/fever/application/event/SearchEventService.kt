@@ -4,10 +4,10 @@ import com.amm.fever.domain.event.Event
 import com.amm.fever.domain.event.EventRepository
 import com.amm.fever.domain.event.ProviderEventRepository
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import reactor.core.publisher.Flux
-import reactor.core.scheduler.Schedulers
+import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
 
 class SearchEventService(
@@ -17,14 +17,15 @@ class SearchEventService(
 
     suspend fun execute(request: SearchEventServiceRequest): SearchEventServiceResponse {
         return coroutineScope {
-            val providerEventFlux: Deferred<List<Event>> = async {
+            val providerEvents: Deferred<List<Event>> = async {
                 findEventsFromExtProviderBy(request.startsAt, request.endsAt)
             }
 
-            val eventFlux: Deferred<List<Event>> = async {
+            val events: Deferred<List<Event>> = async {
                 eventRepository.findBy(request.startsAt, request.endsAt)
             }
-            return@coroutineScope SearchEventServiceResponse(providerEventFlux.await() merge eventFlux.await())
+
+            return@coroutineScope SearchEventServiceResponse(providerEvents.await() merge events.await())
         }
     }
 
@@ -41,19 +42,32 @@ class SearchEventService(
             this.associateBy { event -> event.providerId.value }
         ).values.toList()
 
-    private fun List<Event>.emitCommandEvent(): List<Event> {
-        val source = Flux.create<Event> { emitter ->
-            // println(">>> ${Thread.currentThread().name}")
-            forEach { event -> emitter.next(event) }
-            emitter.complete()
+    private suspend fun List<Event>.emitCommandEvent(): List<Event> {
+        for (event in this) {
+            coroutineScope {
+                launch(Dispatchers.IO) {
+                    // println(">>> ${Thread.currentThread().name}")
+                    eventRepository.save(event)
+                }
+            }
         }
-        // execute the save in parallel threads
-        source.flatMap { item: Event ->
-            Flux.defer { Flux.just(eventRepository.save(item)) }
-                .subscribeOn(Schedulers.parallel())
-        }.subscribe()
         return this
     }
+//   leave it for now
+//
+//    private fun List<Event>.emitCommandEvent(): List<Event> {
+//        val source = Flux.create<Event> { emitter ->
+//            // println(">>> ${Thread.currentThread().name}")
+//            forEach { event -> emitter.next(event) }
+//            emitter.complete()
+//        }
+//        // execute the save in parallel threads
+//        source.flatMap { item: Event ->
+//            Flux.defer { Flux.just(eventRepository.save(item)) }
+//                .subscribeOn(Schedulers.parallel())
+//        }.subscribe()
+//        return this
+//    }
 
     private fun List<Event>.filterByDates(startsAt: OffsetDateTime, endsAt: OffsetDateTime): List<Event> =
         filter { event -> startsAt.isBeforeOrEquals(event.startsAt.value) and endsAt.isAfterOrEquals(event.endsAt.value) }
