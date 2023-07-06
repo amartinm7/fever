@@ -6,7 +6,6 @@ import com.amm.fever.event.PerformanceEventFixtures.ANY_START_DATE
 import com.amm.fever.infrastructure.SpringbootAcceptanceTest
 import com.amm.fever.infrastructure.framework.event.controller.search.SearchApiResponse
 import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
