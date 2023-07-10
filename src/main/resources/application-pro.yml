@@ -13,4 +13,4 @@ app:
 management:
   zipkin:
     tracing:
-      endpoint: "zipkin:9411"
+      endpoint: "http://zipkin:9411"
