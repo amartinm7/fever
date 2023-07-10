@@ -17,8 +17,8 @@ services:
     ports:
       - "8090:8090"
     volumes:
-      - ../../src/testFixtures/resources/mappings/mappings/event/stubs:/./home/mappings/mappings/
-      - ../../src/testFixtures/resources/mappings/mappings/event/response:/./home/mappings/__files/
+      - ../_resources/wiremock/mappings/event/stubs:/./home/wiremock/mappings/
+      - ../_resources/wiremock/mappings/event/response:/./home/wiremock/__files/
     networks:
       - fever-network
   zipkin:
