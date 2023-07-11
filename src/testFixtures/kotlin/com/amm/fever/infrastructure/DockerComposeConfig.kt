@@ -20,6 +20,7 @@ class DockerComposeConfig {
         init {
             docker.start()
             Runtime.getRuntime().addShutdownHook(Thread { docker.stop() })
+            Thread.sleep(5000L)
         }
     }
 }

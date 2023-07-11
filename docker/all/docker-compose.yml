@@ -1,5 +1,5 @@
 version: '3.4'
-
+## Run all the services together
 services:
   database:
     image: postgres:14.5

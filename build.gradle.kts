@@ -56,7 +56,6 @@ dependencies {
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	// test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.springframework.cloud:spring-cloud-contract-mappings:4.0.3")
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")
 	testFixturesApi("org.springframework.boot:spring-boot-testcontainers")
 	testImplementation("org.testcontainers:junit-jupiter")
