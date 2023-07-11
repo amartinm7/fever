@@ -34,9 +34,9 @@ class SearchEventService(
             .emitCommandEvent()
             .filterByDates(startsAt = startsAt, endsAt = endsAt)
 
-
     // creates a map with key providerId and value the event for every List<event>
-    // after that, merges the two maps replacing or adding new entries over the first map
+    // after that, merges the two maps if the key exists, skip the Pair to merge,
+    // otherwise include the new Pair into the hashmap
     private infix fun List<Event>.merge(events: List<Event>): List<Event> =
         events.associateBy { event -> event.providerId.value }.plus(
             this.associateBy { event -> event.providerId.value }
