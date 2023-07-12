@@ -20,6 +20,11 @@ Content-Type: application/json
 GET http://localhost:8000/search?starts_at=2022-06-17T14:18:29Z
 Content-Type: application/json
 
+### GET return 400 Required parameter 'ends_at' is not present
+# @name get events
+GET http://localhost:8000/search?starts_at=2022-06-17T14:18:29Z&ends_at=2022-06-1
+Content-Type: application/json
+
 ### Response when bad request, missing parameter
 #{
 #  "data": null,

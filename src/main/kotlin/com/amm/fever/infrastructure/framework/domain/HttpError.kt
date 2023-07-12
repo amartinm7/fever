@@ -19,7 +19,7 @@ sealed class HttpError(
 
     class BadRequestError(paramName: String) : HttpError(
         code = HttpStatus.BAD_REQUEST.value().toString(),
-        message = "Required parameter '$paramName' is not present"
+        message = "Invalid parameter '$paramName'"
     )
 }
 
