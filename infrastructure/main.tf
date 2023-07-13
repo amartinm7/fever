@@ -26,3 +26,10 @@ module "wiremock" {
 module "zipkin" {
   source = "./containers/zipkin"
 }
+
+# remember recreate the fever-image
+# basic instructions:
+# terraform init
+# terraform plan
+# terraform apply
+# terraform destroy

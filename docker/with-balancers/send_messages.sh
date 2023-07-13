@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# To kill the process
+# pkill -f "./send_messages.sh"
+
 # send messages
 for index in {1..10000}
 do
