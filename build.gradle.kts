@@ -69,8 +69,8 @@ dependencies {
 	testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.25")
 	testImplementation("com.ninja-squad:springmockk:3.1.1")
 	testImplementation("org.awaitility:awaitility:4.2.0")
-	testImplementation("io.rest-assured:kotlin-extensions:5.1.1")
-	testImplementation("io.rest-assured:spring-mock-mvc-kotlin-extensions:5.1.1")
+	testImplementation("io.rest-assured:kotlin-extensions:5.3.1")
+	testImplementation("io.rest-assured:spring-mock-mvc-kotlin-extensions:5.3.1")
 	testImplementation("net.javacrumbs.json-unit:json-unit-fluent:2.35.0")
 }
 
