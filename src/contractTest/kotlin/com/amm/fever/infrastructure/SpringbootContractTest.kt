@@ -1,6 +1,7 @@
 package com.amm.fever.infrastructure
 
 import com.amm.fever.infrastructure.framework.FeverApplication
+import com.amm.fever.infrastructure.framework.config.ControllerAdvice
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.restassured.module.mockmvc.RestAssuredMockMvc
 import org.junit.jupiter.api.BeforeEach
@@ -27,6 +28,7 @@ abstract class SpringbootContractTest {
         val mvc = MockMvcBuilders
             .standaloneSetup(setUpController())
             .setMessageConverters(jacksonConverter())
+            .setControllerAdvice(ControllerAdvice())
             .build()
 
         RestAssuredMockMvc.mockMvc(mvc)
