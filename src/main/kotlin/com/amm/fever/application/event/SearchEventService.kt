@@ -38,8 +38,8 @@ class SearchEventService(
     // after that, merges the two maps if the key exists, skip the Pair to merge,
     // otherwise include the new Pair into the hashmap
     private infix fun List<Event>.merge(events: List<Event>): List<Event> =
-        events.associateBy { event -> event.providerId.value }.plus(
-            this.associateBy { event -> event.providerId.value }
+        events.associateBy { event -> Pair(event.providerId.value, event.providerBaseId.value) }.plus(
+            this.associateBy { event -> Pair(event.providerId.value, event.providerBaseId.value) }
         ).values.toList()
 
     private suspend fun List<Event>.emitCommandEvent(): List<Event> {
