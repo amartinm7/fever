@@ -41,6 +41,7 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.beans.Expression
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -57,7 +58,18 @@ class ExtProviderEventRepository(
     private val is5XX = { statusCode: HttpStatusCode -> statusCode.is5xxServerError }
     private val is4XX = { statusCode: HttpStatusCode -> statusCode.is4xxClientError }
 
+    @Deprecated("Use the new findby() method", level = DeprecationLevel.WARNING)
     override suspend fun findBy(startsAt: OffsetDateTime, endsAt: OffsetDateTime): List<Event> =
+        eventExtProviderWebClient.get()
+            .uri("/api/events")
+            .retrieve()
+            .onStatus(is5XX) { clientResponse -> clientResponse.toServerError() }
+            .onStatus(is4XX) { clientResponse -> clientResponse.toClientError() }
+            // .bodyToMono(EventListType::class.java)
+            // .retryBackoff(5, Duration.ofSeconds(1), Duration.ofSeconds(20))
+            .awaitBody<EventListType>().toEvents()
+
+    override suspend fun findBy(): List<Event> =
         eventExtProviderWebClient.get()
             .uri("/api/events")
             .retrieve()

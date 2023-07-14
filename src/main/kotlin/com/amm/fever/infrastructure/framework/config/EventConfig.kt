@@ -17,9 +17,8 @@ import org.springframework.web.reactive.function.client.WebClient
 class EventConfig {
     @Bean
     fun searchEventService(
-        eventRepository: EventRepository,
-        providerEventRepository: ProviderEventRepository,
-    ) = SearchEventService(eventRepository, providerEventRepository)
+        eventRepository: EventRepository
+    ) = SearchEventService(eventRepository)
 
     @Bean
     fun eventRepository(jpaEventRepositoryClient: JpaEventRepositoryClient, objectMapper: ObjectMapper) =
