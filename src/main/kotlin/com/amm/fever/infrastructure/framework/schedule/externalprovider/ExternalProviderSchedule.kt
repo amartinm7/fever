@@ -24,7 +24,7 @@ class ExternalProviderSchedule(
         lockAtLeastFor = "\${app.scheduler.externalprovider.shedlock.lockAtLeast}",
         lockAtMostFor = "\${app.scheduler.externalprovider.shedlock.lockAtMost}",
     )
-    fun launch() {
+    fun execute() {
         runBlocking {
             try {
                 LOGGER.info(">>> Starting cron ExternalProviderSchedule-launch")
