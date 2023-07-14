@@ -27,6 +27,13 @@ app:
   ms-provider-event.url: http://localhost:${wiremock.server.port}
   ms-provider-event.user: guestuser
   ms-provider-event.password: guestuser
+  scheduler:
+    externalprovider:
+      enabled: true
+      scheduled: "0 * * * * *"
+      shedlock:
+        lockAtLeast: PT30S
+        lockAtMost: PT50S
 
 wiremock:
   server:
@@ -49,3 +56,4 @@ management:
 logging:
   pattern:
     level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+

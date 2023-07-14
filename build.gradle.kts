@@ -54,6 +54,9 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose") // starts docker-compose in local to run the database
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+	// ShedLock
+	implementation("net.javacrumbs.shedlock:shedlock-spring:4.44.0")
+	implementation("net.javacrumbs.shedlock:shedlock-provider-jdbc-template:4.44.0")
 	// test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")
