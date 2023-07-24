@@ -7,13 +7,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-class ExternalProviderService(
+class CreateEventService(
     private val eventRepository: EventRepository,
     private val providerEventRepository: ProviderEventRepository,
 ) {
-    suspend fun execute(request: ExternalProviderServiceRequest): ExternalProviderServiceResponse {
+    suspend fun execute(request: CreateEventServiceRequest): CreateEventServiceResponse {
         findEventsFromExtProviderBy().emitCommandEvent()
-        return ExternalProviderServiceResponse("")
+        return CreateEventServiceResponse("")
     }
 
     private suspend fun findEventsFromExtProviderBy(): List<Event> = providerEventRepository.findBy()
@@ -31,6 +31,6 @@ class ExternalProviderService(
     }
 }
 
-data class ExternalProviderServiceResponse(val i: String)
+data class CreateEventServiceResponse(val i: String)
 
-data class ExternalProviderServiceRequest(val i: String)
+data class CreateEventServiceRequest(val i: String)

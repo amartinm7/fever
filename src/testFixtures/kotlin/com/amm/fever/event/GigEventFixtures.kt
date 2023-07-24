@@ -2,59 +2,50 @@ package com.amm.fever.event
 
 import com.amm.fever.application.event.SearchEventServiceRequest
 import com.amm.fever.application.event.SearchEventServiceResponse
-import com.amm.fever.domain.event.Audit
-import com.amm.fever.domain.event.Capacity
-import com.amm.fever.domain.event.CreatedAt
-import com.amm.fever.domain.event.EndsAt
+import com.amm.fever.domain.vo.Audit
+import com.amm.fever.domain.vo.Capacity
+import com.amm.fever.domain.vo.CreatedAt
+import com.amm.fever.domain.vo.EndsAt
 import com.amm.fever.domain.event.Event
-import com.amm.fever.domain.event.Id
-import com.amm.fever.domain.event.MaxPrice
-import com.amm.fever.domain.event.MinPrice
-import com.amm.fever.domain.event.ModifiedAt
-import com.amm.fever.domain.event.Name
-import com.amm.fever.domain.event.Numbered
-import com.amm.fever.domain.event.Price
-import com.amm.fever.domain.event.ProviderBaseId
-import com.amm.fever.domain.event.ProviderId
-import com.amm.fever.domain.event.SellFrom
-import com.amm.fever.domain.event.SellTo
-import com.amm.fever.domain.event.SoldOut
-import com.amm.fever.domain.event.StartAt
-import com.amm.fever.domain.event.Title
-import com.amm.fever.domain.event.Zone
-import com.amm.fever.domain.event.ZoneId
-import com.amm.fever.domain.event.Zones
+import com.amm.fever.domain.vo.Id
+import com.amm.fever.domain.vo.MaxPrice
+import com.amm.fever.domain.vo.MinPrice
+import com.amm.fever.domain.vo.ModifiedAt
+import com.amm.fever.domain.vo.ZoneName
+import com.amm.fever.domain.vo.Numbered
+import com.amm.fever.domain.vo.Price
+import com.amm.fever.domain.vo.EventBaseId
+import com.amm.fever.domain.vo.EventId
+import com.amm.fever.domain.vo.SellFrom
+import com.amm.fever.domain.vo.SellTo
+import com.amm.fever.domain.vo.SoldOut
+import com.amm.fever.domain.vo.StartAt
+import com.amm.fever.domain.vo.Title
+import com.amm.fever.domain.vo.Zone
+import com.amm.fever.domain.vo.ZoneId
+import com.amm.fever.domain.vo.Zones
 import com.amm.fever.infrastructure.framework.event.controller.search.EventList
 import com.amm.fever.infrastructure.framework.event.controller.search.EventSummary
-import java.time.OffsetDateTime
-import java.time.temporal.ChronoUnit
-import java.util.UUID
+import com.amm.fever.vo.GigVOFixtures.ANY_CAPACITY
+import com.amm.fever.vo.GigVOFixtures.ANY_CREATED_AT
+import com.amm.fever.vo.GigVOFixtures.ANY_END_DATE
+import com.amm.fever.vo.GigVOFixtures.ANY_MAX_PRICE
+import com.amm.fever.vo.GigVOFixtures.ANY_MIN_PRICE
+import com.amm.fever.vo.GigVOFixtures.ANY_MODIFIED_AT
+import com.amm.fever.vo.GigVOFixtures.ANY_NUMBERED
+import com.amm.fever.vo.GigVOFixtures.ANY_PRICE
+import com.amm.fever.vo.GigVOFixtures.ANY_EVENT_BASE_ID
+import com.amm.fever.vo.GigVOFixtures.ANY_EVENT_ID
+import com.amm.fever.vo.GigVOFixtures.ANY_SELL_FROM
+import com.amm.fever.vo.GigVOFixtures.ANY_SELL_TO
+import com.amm.fever.vo.GigVOFixtures.ANY_SOLD_OUT
+import com.amm.fever.vo.GigVOFixtures.ANY_START_DATE
+import com.amm.fever.vo.GigVOFixtures.ANY_TITLE
+import com.amm.fever.vo.GigVOFixtures.ANY_UUID
+import com.amm.fever.vo.GigVOFixtures.ANY_ZONE_ID
+import com.amm.fever.vo.GigVOFixtures.ANY_ZONE_NAME
 
 object GigEventFixtures {
-
-    const val ANY_UUID_STR = "fdcd386f-11a5-448f-b630-52be130c07a0"
-    val ANY_UUID = UUID.fromString(ANY_UUID_STR)
-    const val ANY_PROVIDER_ID = "291"
-    const val ANY_PROVIDER_BASE_ID = "291"
-    const val ANY_TITLE = "Camela en concierto"
-    val ANY_START_DATE = OffsetDateTime.parse("2021-06-30T21:00:00Z").truncatedTo(ChronoUnit.SECONDS)
-    val ANY_END_DATE = OffsetDateTime.parse("2021-06-30T22:00:00Z").truncatedTo(ChronoUnit.SECONDS)
-    val ANY_SELL_FROM = OffsetDateTime.parse("2020-07-01T00:00:00Z").truncatedTo(ChronoUnit.SECONDS)
-    val ANY_SELL_TO = OffsetDateTime.parse("2021-06-30T20:00:00Z").truncatedTo(ChronoUnit.SECONDS)
-    const val ANY_SOLD_OUT = false
-    val ANY_ZONES_JSON =
-        """
-            {"zones": 
-            [
-                    {"zone_id":"40", "capacity":"243", "price":"20.00", "name":"Platea", "numbered":"true"},
-                    {"zone_id":"38", "capacity":"100", "price":"15.00", "name":"Grada 2", "numbered":"false"},
-                    {"zone_id":"30", "capacity":"90", "price":"30.00", "name":"A28", "numbered":"true"}
-                ]}
-                """.trimMargin()
-    const val ANY_MIN_PRICE = 15.0
-    const val ANY_MAX_PRICE = 30.0
-    val ANY_CREATED_AT = OffsetDateTime.parse("2023-06-18T21:00:00Z").truncatedTo(ChronoUnit.SECONDS)
-    val ANY_MODIFIED_AT = ANY_CREATED_AT
     val ANY_EVENT_LIST = EventList(
         events = listOf(
             EventSummary(
@@ -73,8 +64,8 @@ object GigEventFixtures {
     val ANY_EVENTS = listOf(
         Event(
             id = Id(ANY_UUID),
-            providerId = ProviderId(ANY_PROVIDER_ID),
-            providerBaseId = ProviderBaseId(ANY_PROVIDER_BASE_ID),
+            eventId = EventId(ANY_EVENT_ID),
+            eventBaseId = EventBaseId(ANY_EVENT_BASE_ID),
             organizerCompanyId = null,
             title = Title(ANY_TITLE),
             startsAt = StartAt(ANY_START_DATE),
@@ -85,25 +76,25 @@ object GigEventFixtures {
             zones = Zones(
                 value = listOf(
                     Zone(
-                        id = ZoneId("40"),
-                        capacity = Capacity("243"),
-                        price = Price("20.00"),
-                        name = Name("Platea"),
-                        numbered = Numbered("true")
+                        id = ZoneId(ANY_ZONE_ID),
+                        capacity = Capacity(ANY_CAPACITY),
+                        price = Price(ANY_PRICE),
+                        zoneName = ZoneName(ANY_ZONE_NAME),
+                        numbered = Numbered(ANY_NUMBERED)
                     ),
                     Zone(
                         id = ZoneId("38"),
-                        capacity = Capacity("100"),
-                        price = Price("15.00"),
-                        name = Name("Grada 2"),
-                        numbered = Numbered("false")
+                        capacity = Capacity(100L),
+                        price = Price(15.00),
+                        zoneName = ZoneName("Grada 2"),
+                        numbered = Numbered(false)
                     ),
                     Zone(
                         id = ZoneId("30"),
-                        capacity = Capacity("90"),
-                        price = Price("30.00"),
-                        name = Name("A28"),
-                        numbered = Numbered("true")
+                        capacity = Capacity(90L),
+                        price = Price(30.00),
+                        zoneName = ZoneName("A28"),
+                        numbered = Numbered(true)
                     )
 
                 )

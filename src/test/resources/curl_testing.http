@@ -69,3 +69,9 @@ Content-Type: application/json
 ### GET a health check of a path
 # @name health check
 http://localhost:8000/actuator/health/{*path}
+
+
+###
+GET http://localhost:8000/publish
+Content-Type: application/json
+Accept: application/json

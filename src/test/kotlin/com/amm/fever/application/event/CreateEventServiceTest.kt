@@ -4,23 +4,22 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.amm.fever.domain.event.EventRepository
 import com.amm.fever.domain.event.ProviderEventRepository
-import com.amm.fever.event.GigEventFixtures
 import com.amm.fever.event.PerformanceEventFixtures
-import com.amm.fever.event.PerformanceEventFixtures.ANY_END_DATE
 import com.amm.fever.event.PerformanceEventFixtures.ANY_EVENTS
+import com.amm.fever.vo.GigVOFixtures
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_END_DATE
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
-class ExternalProviderServiceTest {
+class CreateEventServiceTest {
 
     @MockK
     private lateinit var providerEventRepository: ProviderEventRepository
@@ -29,7 +28,7 @@ class ExternalProviderServiceTest {
     private lateinit var eventRepository: EventRepository
 
     @InjectMockKs
-    private lateinit var externalProviderService: ExternalProviderService
+    private lateinit var createEventService: CreateEventService
 
     @Test
     fun `should save a list of events`() = runBlocking {
@@ -37,7 +36,7 @@ class ExternalProviderServiceTest {
         `mock the external provider repository call and returns a list of performance events`()
 
         val expected = ANY_EVENTS
-        val response = externalProviderService.execute(ExternalProviderServiceRequest(""))
+        val response = createEventService.execute(CreateEventServiceRequest(""))
 
         assertThat(response.i).isEqualTo("")
         verify(exactly = 1) {
@@ -53,6 +52,7 @@ class ExternalProviderServiceTest {
             }
         }
     }
+
     private fun `mock saving performance event on repository`() {
         val event = PerformanceEventFixtures.ANY_EVENTS[0]
         every {
@@ -63,7 +63,7 @@ class ExternalProviderServiceTest {
     private fun `mock the db repository call and returns a list of events`() {
         every {
             runBlocking {
-                eventRepository.findBy(startsAt = GigEventFixtures.ANY_START_DATE, endsAt = ANY_END_DATE)
+                eventRepository.findBy(startsAt = GigVOFixtures.ANY_START_DATE, endsAt = ANY_END_DATE)
             }
         } returns ANY_EVENTS
     }

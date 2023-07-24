@@ -1,6 +1,6 @@
 package com.amm.fever.infrastructure.framework.config
 
-import com.amm.fever.application.event.ExternalProviderService
+import com.amm.fever.application.event.CreateEventService
 import com.amm.fever.domain.event.EventRepository
 import com.amm.fever.domain.event.ProviderEventRepository
 import org.springframework.context.annotation.Bean
@@ -13,7 +13,7 @@ class ExternalProviderConfig {
     fun externalProviderService(
         eventRepository: EventRepository,
         providerEventRepository: ProviderEventRepository,
-    ) = ExternalProviderService(
+    ) = CreateEventService(
         eventRepository,
         providerEventRepository
     )

@@ -1,7 +1,10 @@
 package com.amm.fever.infrastructure.framework.schedule.externalprovider
 
-import com.amm.fever.application.event.ExternalProviderService
-import com.amm.fever.application.event.ExternalProviderServiceRequest
+import com.amm.fever.application.event.CreateEventService
+import com.amm.fever.application.event.CreateEventServiceRequest
+import com.amm.fever.application.zone.CreateZoneEventService
+import com.amm.fever.application.zone.CreateZoneEventServiceRequest
+import java.util.UUID
 import kotlinx.coroutines.runBlocking
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock
 import org.slf4j.LoggerFactory
@@ -10,30 +13,30 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 @Component
-class ExternalProviderSchedule(
-    private val externalProviderService: ExternalProviderService,
+class ZoneEventSchedule(
+    private val createZoneEventService: CreateZoneEventService,
     @Value("\${app.scheduler.externalprovider.enabled}")
     private var isEnabledScheduler: Boolean = false
 ) {
 
-    private val LOGGER = LoggerFactory.getLogger(ExternalProviderSchedule::class.java)
+    private val LOGGER = LoggerFactory.getLogger(ZoneEventSchedule::class.java)
 
     @Scheduled(cron = "\${app.scheduler.externalprovider.scheduled}")
     @SchedulerLock(
-        name = "external_provider_service",
+        name = "create_zone_service",
         lockAtLeastFor = "\${app.scheduler.externalprovider.shedlock.lockAtLeast}",
         lockAtMostFor = "\${app.scheduler.externalprovider.shedlock.lockAtMost}",
     )
     fun execute() {
         runBlocking {
             try {
-                LOGGER.info(">>> Starting cron ExternalProviderSchedule-launch")
+                LOGGER.info(">>> Starting cron ZoneEventSchedule")
                 if (isEnabledScheduler) {
-                    externalProviderService.execute(ExternalProviderServiceRequest(""))
+                    createZoneEventService.execute(CreateZoneEventServiceRequest(UUID.randomUUID()))
                 }
-                LOGGER.info(">>> Ended cron ExternalProviderSchedule-launch")
+                LOGGER.info(">>> Ended cron ZoneEventSchedule")
             } catch (exception: Exception) {
-                LOGGER.error(">>> Error executing cron DeleteExpiredAds ${exception.message}", exception)
+                LOGGER.error(">>> Error executing cron ZoneEventSchedule ${exception.message}", exception)
             }
         }
     }

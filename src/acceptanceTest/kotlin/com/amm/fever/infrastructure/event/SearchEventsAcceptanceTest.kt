@@ -1,8 +1,8 @@
 package com.amm.fever.infrastructure.event
 
-import com.amm.fever.event.PerformanceEventFixtures.ANY_END_DATE
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_END_DATE
 import com.amm.fever.event.PerformanceEventFixtures.ANY_EVENT_LIST
-import com.amm.fever.event.PerformanceEventFixtures.ANY_START_DATE
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_START_DATE
 import com.amm.fever.infrastructure.SpringbootAcceptanceTest
 import com.amm.fever.infrastructure.framework.event.controller.search.SearchApiResponse
 import org.assertj.core.api.Assertions

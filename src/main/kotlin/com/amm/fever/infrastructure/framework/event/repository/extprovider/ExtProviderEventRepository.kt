@@ -1,51 +1,46 @@
 package com.amm.fever.infrastructure.framework.event.repository.extprovider
 
-import com.amm.fever.domain.event.Audit
-import com.amm.fever.domain.event.Capacity
-import com.amm.fever.domain.event.CreatedAt
-import com.amm.fever.domain.event.EndsAt
 import com.amm.fever.domain.event.Event
 import com.amm.fever.domain.event.EventCommunicationException
 import com.amm.fever.domain.event.EventNotFoundException
 import com.amm.fever.domain.event.EventUnprocessableEntityException
-import com.amm.fever.domain.event.Id
-import com.amm.fever.domain.event.MaxPrice
-import com.amm.fever.domain.event.MinPrice
-import com.amm.fever.domain.event.ModifiedAt
-import com.amm.fever.domain.event.Name
-import com.amm.fever.domain.event.Numbered
-import com.amm.fever.domain.event.OrganizerCompanyId
-import com.amm.fever.domain.event.Price
-import com.amm.fever.domain.event.ProviderBaseId
 import com.amm.fever.domain.event.ProviderEventRepository
-import com.amm.fever.domain.event.ProviderId
-import com.amm.fever.domain.event.SellFrom
-import com.amm.fever.domain.event.SellTo
-import com.amm.fever.domain.event.SoldOut
-import com.amm.fever.domain.event.StartAt
-import com.amm.fever.domain.event.Title
-import com.amm.fever.domain.event.Zone
-import com.amm.fever.domain.event.ZoneId
-import com.amm.fever.domain.event.Zones
+import com.amm.fever.domain.vo.Audit
+import com.amm.fever.domain.vo.Capacity
+import com.amm.fever.domain.vo.CreatedAt
+import com.amm.fever.domain.vo.EndsAt
+import com.amm.fever.domain.vo.Id
+import com.amm.fever.domain.vo.MaxPrice
+import com.amm.fever.domain.vo.MinPrice
+import com.amm.fever.domain.vo.ModifiedAt
+import com.amm.fever.domain.vo.ZoneName
+import com.amm.fever.domain.vo.Numbered
+import com.amm.fever.domain.vo.OrganizerCompanyId
+import com.amm.fever.domain.vo.Price
+import com.amm.fever.domain.vo.EventBaseId
+import com.amm.fever.domain.vo.EventId
+import com.amm.fever.domain.vo.SellFrom
+import com.amm.fever.domain.vo.SellTo
+import com.amm.fever.domain.vo.SoldOut
+import com.amm.fever.domain.vo.StartAt
+import com.amm.fever.domain.vo.Title
+import com.amm.fever.domain.vo.Zone
+import com.amm.fever.domain.vo.ZoneId
+import com.amm.fever.domain.vo.Zones
 import com.amm.fever.infrastructure.event.repository.extprovider.dto.BaseEventType
 import com.amm.fever.infrastructure.event.repository.extprovider.dto.EventListType
 import com.amm.fever.infrastructure.event.repository.extprovider.dto.ZoneType
 import com.amm.fever.infrastructure.services.OffsetDateTimeHandler
 import com.amm.fever.infrastructure.services.UuidService
 import com.amm.fever.infrastructure.services.toOffsetDateTime
+import java.time.OffsetDateTime
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import java.beans.Expression
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
-import java.time.temporal.ChronoUnit
 
 class ExtProviderEventRepository(
     private val eventExtProviderWebClient: WebClient,
@@ -99,10 +94,10 @@ class ExtProviderEventRepository(
         map { zoneType ->
             Zone(
                 id = ZoneId(zoneType.zoneId),
-                capacity = Capacity(zoneType.capacity),
-                price = Price(zoneType.price),
-                name = Name(zoneType.name),
-                numbered = Numbered(zoneType.numbered)
+                capacity = Capacity(zoneType.capacity.toLong()),
+                price = Price(zoneType.price.toDouble()),
+                zoneName = ZoneName(zoneType.name),
+                numbered = Numbered(zoneType.numbered.toBoolean())
             )
         }
 
@@ -115,8 +110,8 @@ class ExtProviderEventRepository(
     private fun BaseEventType.toEvent(): Event =
         Event(
             id = Id(uuidService.randomUUID()),
-            providerId = ProviderId(event.eventId),
-            providerBaseId = ProviderBaseId(baseEventId),
+            eventId = EventId(event.eventId),
+            eventBaseId = EventBaseId(baseEventId),
             organizerCompanyId = organizerCompanyId?.let { OrganizerCompanyId(organizerCompanyId) },
             title = Title(title),
             startsAt = StartAt(event.eventStartDate.toOffsetDateTime()),

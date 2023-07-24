@@ -3,11 +3,11 @@ package com.amm.fever.infrastructure.event.controller.search
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.amm.fever.application.event.SearchEventService
-import com.amm.fever.event.PerformanceEventFixtures.ANY_END_DATE
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_END_DATE
 import com.amm.fever.event.PerformanceEventFixtures.ANY_EVENT_LIST
 import com.amm.fever.event.PerformanceEventFixtures.ANY_SEARCH_EVENT_SERVICE_REQUEST
 import com.amm.fever.event.PerformanceEventFixtures.ANY_SEARCH_EVENT_SERVICE_RESPONSE
-import com.amm.fever.event.PerformanceEventFixtures.ANY_START_DATE
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_START_DATE
 import com.amm.fever.event.PerformanceEventFixtures.EMPTY_SEARCH_EVENT_SERVICE_RESPONSE
 import com.amm.fever.infrastructure.framework.domain.HttpError
 import com.amm.fever.infrastructure.framework.event.controller.search.SearchApiResponse

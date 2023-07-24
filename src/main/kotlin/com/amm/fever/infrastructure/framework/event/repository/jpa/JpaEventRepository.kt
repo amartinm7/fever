@@ -1,28 +1,28 @@
 package com.amm.fever.infrastructure.framework.event.repository.jpa
 
-import com.amm.fever.domain.event.Audit
-import com.amm.fever.domain.event.Capacity
-import com.amm.fever.domain.event.CreatedAt
-import com.amm.fever.domain.event.EndsAt
 import com.amm.fever.domain.event.Event
 import com.amm.fever.domain.event.EventRepository
-import com.amm.fever.domain.event.MaxPrice
-import com.amm.fever.domain.event.MinPrice
-import com.amm.fever.domain.event.ModifiedAt
-import com.amm.fever.domain.event.Name
-import com.amm.fever.domain.event.Numbered
-import com.amm.fever.domain.event.OrganizerCompanyId
-import com.amm.fever.domain.event.Price
-import com.amm.fever.domain.event.ProviderBaseId
-import com.amm.fever.domain.event.ProviderId
-import com.amm.fever.domain.event.SellFrom
-import com.amm.fever.domain.event.SellTo
-import com.amm.fever.domain.event.SoldOut
-import com.amm.fever.domain.event.StartAt
-import com.amm.fever.domain.event.Title
-import com.amm.fever.domain.event.Zone
-import com.amm.fever.domain.event.ZoneId
-import com.amm.fever.domain.event.Zones
+import com.amm.fever.domain.vo.Audit
+import com.amm.fever.domain.vo.Capacity
+import com.amm.fever.domain.vo.CreatedAt
+import com.amm.fever.domain.vo.EndsAt
+import com.amm.fever.domain.vo.MaxPrice
+import com.amm.fever.domain.vo.MinPrice
+import com.amm.fever.domain.vo.ModifiedAt
+import com.amm.fever.domain.vo.ZoneName
+import com.amm.fever.domain.vo.Numbered
+import com.amm.fever.domain.vo.OrganizerCompanyId
+import com.amm.fever.domain.vo.Price
+import com.amm.fever.domain.vo.EventBaseId
+import com.amm.fever.domain.vo.EventId
+import com.amm.fever.domain.vo.SellFrom
+import com.amm.fever.domain.vo.SellTo
+import com.amm.fever.domain.vo.SoldOut
+import com.amm.fever.domain.vo.StartAt
+import com.amm.fever.domain.vo.Title
+import com.amm.fever.domain.vo.Zone
+import com.amm.fever.domain.vo.ZoneId
+import com.amm.fever.domain.vo.Zones
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.persistence.Column
@@ -31,13 +31,13 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
 import jakarta.persistence.TemporalType
+import java.time.OffsetDateTime
+import java.util.*
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
-import java.time.OffsetDateTime
-import java.util.UUID
 
 class JpaEventRepository(
     private val jpaEventRepositoryClient: JpaEventRepositoryClient,
@@ -46,14 +46,14 @@ class JpaEventRepository(
 
     override fun save(event: Event): Event =
         jpaEventRepositoryClient.findByIds(
-            providerId = event.providerId.value,
-            providerBaseId = event.providerBaseId.value
+            eventId = event.eventId.value,
+            eventBaseId = event.eventBaseId.value
         ).saveOrUpdate(event)
-            //.also { println(">>> ${Thread.currentThread().name}") }
+    //.also { println(">>> ${Thread.currentThread().name}") }
 
     private fun JpaEvent?.saveOrUpdate(event: Event): Event {
-        this?.let {
-            jpaEvent -> event.toJpaEvent(jpaEvent.id, jpaEvent.createdAt).save()
+        this?.let { jpaEvent ->
+            event.toJpaEvent(jpaEvent.id, jpaEvent.createdAt).save()
         } ?: event.toJpaEvent().save()
         return event
     }
@@ -67,8 +67,8 @@ class JpaEventRepository(
     private fun Event.toJpaEvent(jpaId: UUID? = null, createdAt: OffsetDateTime? = null) =
         JpaEvent(
             id = jpaId ?: id.value,
-            providerId = providerId.value,
-            providerBaseId = providerBaseId.value,
+            eventId = eventId.value,
+            eventBaseId = eventBaseId.value,
             organizerCompanyId = organizerCompanyId?.value,
             title = title.value,
             startsAt = startsAt.value,
@@ -91,16 +91,16 @@ class JpaEventRepository(
             id = id.value,
             capacity = capacity.value,
             price = price.value,
-            name = name.value,
+            name = zoneName.value,
             numbered = numbered.value
         )
 
     private fun List<JpaEvent>.toEvents() =
         map { jpaEvent ->
             Event(
-                id = com.amm.fever.domain.event.Id(jpaEvent.id),
-                providerId = ProviderId(jpaEvent.providerId),
-                providerBaseId = ProviderBaseId(jpaEvent.providerBaseId),
+                id = com.amm.fever.domain.vo.Id(jpaEvent.id),
+                eventId = EventId(jpaEvent.eventId),
+                eventBaseId = EventBaseId(jpaEvent.eventBaseId),
                 organizerCompanyId = jpaEvent.organizerCompanyId?.let { OrganizerCompanyId(jpaEvent.organizerCompanyId) },
                 title = Title(jpaEvent.title),
                 startsAt = StartAt(jpaEvent.startsAt),
@@ -123,7 +123,7 @@ class JpaEventRepository(
             id = ZoneId(id),
             capacity = Capacity(capacity),
             price = Price(price),
-            name = Name(name),
+            zoneName = ZoneName(name),
             numbered = Numbered(numbered)
         )
 
@@ -135,10 +135,10 @@ interface JpaEventRepositoryClient : JpaRepository<JpaEvent, UUID> {
     @Query("SELECT EV FROM JpaEvent EV WHERE EV.startsAt >= :startsAt and EV.endsAt <= :endsAt")
     fun findBy(@Param("startsAt") startsAt: OffsetDateTime, @Param("endsAt") endsAt: OffsetDateTime): List<JpaEvent>
 
-    @Query("SELECT EV FROM JpaEvent EV WHERE EV.providerId = :providerId and EV.providerBaseId = :providerBaseId")
+    @Query("SELECT EV FROM JpaEvent EV WHERE EV.eventId = :eventId and EV.eventBaseId = :eventBaseId")
     fun findByIds(
-        @Param("providerId") providerId: String,
-        @Param("providerBaseId") providerBaseId: String
+        @Param("eventId") eventId: String,
+        @Param("eventBaseId") eventBaseId: String
     ): JpaEvent?
 }
 
@@ -148,10 +148,10 @@ data class JpaEvent(
     @Id
     @Column(name = "ID")
     val id: UUID,
-    @Column(name = "PROVIDER_ID")
-    val providerId: String,
-    @Column(name = "PROVIDER_BASE_ID")
-    val providerBaseId: String,
+    @Column(name = "EVENT_ID")
+    val eventId: String,
+    @Column(name = "EVENT_BASE_ID")
+    val eventBaseId: String,
     @Column(name = "ORGANIZER_COMPANY_ID")
     val organizerCompanyId: String?,
     @Column(name = "TITLE")
@@ -187,10 +187,10 @@ data class JpaEvent(
 
 data class JpaZone(
     @JsonProperty("zone_id") val id: String,
-    @JsonProperty("capacity") val capacity: String,
-    @JsonProperty("price") val price: String,
+    @JsonProperty("capacity") val capacity: Long,
+    @JsonProperty("price") val price: Double,
     @JsonProperty("name") val name: String,
-    @JsonProperty("numbered") val numbered: String
+    @JsonProperty("numbered") val numbered: Boolean
 )
 
 data class JpaZones(

@@ -1,14 +1,14 @@
 package com.amm.fever.infrastructure.event.controller.search
 
 import com.amm.fever.application.event.SearchEventService
-import com.amm.fever.event.PerformanceEventFixtures.ANY_END_DATE
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_END_DATE
 import com.amm.fever.event.PerformanceEventFixtures.ANY_SEARCH_EVENT_SERVICE_REQUEST
 import com.amm.fever.event.PerformanceEventFixtures.ANY_SEARCH_EVENT_SERVICE_RESPONSE
-import com.amm.fever.event.PerformanceEventFixtures.ANY_START_DATE
-import com.amm.fever.event.PerformanceEventFixtures.NO_MATCH_END_DATE
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_START_DATE
+import com.amm.fever.vo.PerformanceVOFixtures.NO_MATCH_END_DATE
 import com.amm.fever.event.PerformanceEventFixtures.NO_MATCH_SEARCH_EVENT_SERVICE_REQUEST
 import com.amm.fever.event.PerformanceEventFixtures.NO_MATCH_SEARCH_EVENT_SERVICE_RESPONSE
-import com.amm.fever.event.PerformanceEventFixtures.NO_MATCH_START_DATE
+import com.amm.fever.vo.PerformanceVOFixtures.NO_MATCH_START_DATE
 import com.amm.fever.infrastructure.SpringbootContractTest
 import com.amm.fever.infrastructure.framework.event.controller.search.SearchEventsApi
 import com.amm.fever.infrastructure.matchesJson

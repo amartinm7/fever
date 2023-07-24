@@ -1,0 +1,27 @@
+DROP TABLE IF EXISTS ZONE;
+
+CREATE TABLE ZONE
+(
+    ID               UUID                     NOT NULL,
+    ZONE_ID          VARCHAR                  NOT NULL,
+    ZONE_NAME        VARCHAR                  NOT NULL,
+    EVENT_ID         VARCHAR                  NOT NULL,
+    EVENT_BASE_ID    VARCHAR                  NOT NULL,
+    TITLE            VARCHAR                  NOT NULL,
+    START_DATE       TIMESTAMP WITH TIME ZONE NOT NULL,
+    END_DATE         TIMESTAMP WITH TIME ZONE NOT NULL,
+    CAPACITY         NUMERIC                  NOT NULL,
+    NUMBERED         BOOLEAN                  NOT NULL,
+    SOLD_OUT         BOOLEAN                  NOT NULL,
+    PRICE            DOUBLE PRECISION         NOT NULL,
+    VERSION          NUMERIC                  NOT NULL,
+    CREATED_AT       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT (now()):: timestamp(0) without time zone,
+    MODIFIED_AT      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT (now()):: timestamp(0) without time zone
+);
+
+ALTER TABLE ZONE
+    ADD CONSTRAINT PK_ZONE UNIQUE (ID);
+
+CREATE INDEX IF NOT EXISTS IDX_ZONE_ID ON ZONE (ID);
+CREATE INDEX IF NOT EXISTS IDX_ZONE_KEYS ON ZONE (EVENT_ID, EVENT_BASE_ID, ZONE_ID);
+CREATE INDEX IF NOT EXISTS IDX_ZONE_START_END_DATE ON ZONE (START_DATE, END_DATE);

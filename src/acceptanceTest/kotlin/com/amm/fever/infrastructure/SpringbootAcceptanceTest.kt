@@ -1,20 +1,20 @@
 package com.amm.fever.infrastructure
 
-import com.amm.fever.event.PerformanceEventFixtures.ANY_CREATED_AT
-import com.amm.fever.event.PerformanceEventFixtures.ANY_END_DATE
-import com.amm.fever.event.PerformanceEventFixtures.ANY_MAX_PRICE
-import com.amm.fever.event.PerformanceEventFixtures.ANY_MIN_PRICE
-import com.amm.fever.event.PerformanceEventFixtures.ANY_MODIFIED_AT
-import com.amm.fever.event.PerformanceEventFixtures.ANY_ORGANIZER_COMPANY_ID
-import com.amm.fever.event.PerformanceEventFixtures.ANY_PROVIDER_BASE_ID
-import com.amm.fever.event.PerformanceEventFixtures.ANY_PROVIDER_ID
-import com.amm.fever.event.PerformanceEventFixtures.ANY_SELL_FROM
-import com.amm.fever.event.PerformanceEventFixtures.ANY_SELL_TO
-import com.amm.fever.event.PerformanceEventFixtures.ANY_SOLD_OUT
-import com.amm.fever.event.PerformanceEventFixtures.ANY_START_DATE
-import com.amm.fever.event.PerformanceEventFixtures.ANY_TITLE
-import com.amm.fever.event.PerformanceEventFixtures.ANY_UUID
-import com.amm.fever.event.PerformanceEventFixtures.ANY_ZONES
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_CREATED_AT
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_END_DATE
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_MAX_PRICE
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_MIN_PRICE
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_MODIFIED_AT
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_ORGANIZER_COMPANY_ID
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_EVENT_BASE_ID
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_EVENT_ID
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_SELL_FROM
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_SELL_TO
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_SOLD_OUT
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_START_DATE
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_TITLE
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_UUID
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_ZONES
 import com.amm.fever.infrastructure.framework.FeverApplication
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -73,8 +73,8 @@ class EventDatabaseSupport(
     fun createEvent() {
         val mapper: Map<String, Any> = mapOf(
             "ID" to ANY_UUID,
-            "PROVIDER_ID" to ANY_PROVIDER_ID,
-            "PROVIDER_BASE_ID" to ANY_PROVIDER_BASE_ID,
+            "EVENT_ID" to ANY_EVENT_ID,
+            "EVENT_BASE_ID" to ANY_EVENT_BASE_ID,
             "ORGANIZER_COMPANY_ID" to ANY_ORGANIZER_COMPANY_ID,
             "TITLE" to ANY_TITLE,
             "START_DATE" to ANY_START_DATE,
@@ -91,8 +91,8 @@ class EventDatabaseSupport(
         jdbcTemplate.update(
             """INSERT INTO EVENT (
                         ID, 
-                        PROVIDER_ID, 
-                        PROVIDER_BASE_ID, 
+                        EVENT_ID, 
+                        EVENT_BASE_ID, 
                         ORGANIZER_COMPANY_ID, 
                         TITLE,
                         START_DATE, 
@@ -108,8 +108,8 @@ class EventDatabaseSupport(
                     )
                     VALUES ( 
                         :ID::uuid, 
-                        :PROVIDER_ID, 
-                        :PROVIDER_BASE_ID, 
+                        :EVENT_ID, 
+                        :EVENT_BASE_ID, 
                         :ORGANIZER_COMPANY_ID, 
                         :TITLE,
                         :START_DATE, 

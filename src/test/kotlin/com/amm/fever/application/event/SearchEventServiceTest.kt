@@ -3,9 +3,9 @@ package com.amm.fever.application.event
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.amm.fever.domain.event.EventRepository
-import com.amm.fever.event.GigEventFixtures
-import com.amm.fever.event.PerformanceEventFixtures.ANY_END_DATE
 import com.amm.fever.event.PerformanceEventFixtures.ANY_EVENTS
+import com.amm.fever.vo.GigVOFixtures
+import com.amm.fever.vo.PerformanceVOFixtures.ANY_END_DATE
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -36,7 +36,7 @@ class SearchEventServiceTest {
         verify(exactly = 1) {
             runBlocking {
                 eventRepository.findBy(
-                    startsAt = GigEventFixtures.ANY_START_DATE,
+                    startsAt = GigVOFixtures.ANY_START_DATE,
                     endsAt = ANY_END_DATE
                 )
             }
@@ -46,13 +46,13 @@ class SearchEventServiceTest {
     private fun `mock the db repository call and returns a list of events`() {
         every {
             runBlocking {
-                eventRepository.findBy(startsAt = GigEventFixtures.ANY_START_DATE, endsAt = ANY_END_DATE)
+                eventRepository.findBy(startsAt = GigVOFixtures.ANY_START_DATE, endsAt = ANY_END_DATE)
             }
         } returns ANY_EVENTS
     }
 
     companion object {
         val GIG_AND_PERF_SEARCH_EVENT_SERVICE_REQUEST =
-            SearchEventServiceRequest(startsAt = GigEventFixtures.ANY_START_DATE, endsAt = ANY_END_DATE)
+            SearchEventServiceRequest(startsAt = GigVOFixtures.ANY_START_DATE, endsAt = ANY_END_DATE)
     }
 }
