@@ -22,7 +22,7 @@ import com.amm.fever.domain.vo.SellTo
 import com.amm.fever.domain.vo.SoldOut
 import com.amm.fever.domain.vo.StartAt
 import com.amm.fever.domain.vo.Title
-import com.amm.fever.domain.vo.Zone
+import com.amm.fever.domain.vo.ZoneVO
 import com.amm.fever.domain.vo.ZoneId
 import com.amm.fever.domain.vo.Zones
 import com.amm.fever.infrastructure.framework.event.controller.search.EventList
@@ -78,14 +78,14 @@ object PerformanceEventFixtures {
             soldOut = SoldOut(ANY_SOLD_OUT),
             zones = Zones(
                 value = listOf(
-                    Zone(
+                    ZoneVO(
                         id = ZoneId("186"),
                         capacity = Capacity(2L),
                         price = Price(75.00),
                         zoneName = ZoneName("Amfiteatre"),
                         numbered = Numbered(true)
                     ),
-                    Zone(
+                    ZoneVO(
                         id = ZoneId("186"),
                         capacity = Capacity(16L),
                         price = Price(65.00),

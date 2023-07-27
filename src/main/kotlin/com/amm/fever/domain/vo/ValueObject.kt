@@ -19,14 +19,14 @@ data class Capacity(val value: Long)
 data class Price(val value: Double)
 data class ZoneName(val value: String)
 data class Numbered(val value: Boolean)
-data class Zone(
+data class ZoneVO(
     val id: ZoneId,
     val capacity: Capacity,
     val price: Price,
     val zoneName: ZoneName,
     val numbered: Numbered
 )
-data class Zones(val value: List<Zone>)
+data class Zones(val value: List<ZoneVO>)
 data class MinPrice(val value: Double)
 data class MaxPrice(val value: Double)
 data class CreatedAt(val value: OffsetDateTime)

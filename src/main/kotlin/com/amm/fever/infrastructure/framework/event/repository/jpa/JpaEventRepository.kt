@@ -20,7 +20,7 @@ import com.amm.fever.domain.vo.SellTo
 import com.amm.fever.domain.vo.SoldOut
 import com.amm.fever.domain.vo.StartAt
 import com.amm.fever.domain.vo.Title
-import com.amm.fever.domain.vo.Zone
+import com.amm.fever.domain.vo.ZoneVO
 import com.amm.fever.domain.vo.ZoneId
 import com.amm.fever.domain.vo.Zones
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -86,7 +86,7 @@ class JpaEventRepository(
     private fun Zones.toJpaZones() =
         JpaZones(zones = this.value.map { zone -> zone.toJpaZone() })
 
-    private fun Zone.toJpaZone() =
+    private fun ZoneVO.toJpaZone() =
         JpaZone(
             id = id.value,
             capacity = capacity.value,
@@ -119,7 +119,7 @@ class JpaEventRepository(
         }
 
     private fun JpaZone.toZone() =
-        Zone(
+        ZoneVO(
             id = ZoneId(id),
             capacity = Capacity(capacity),
             price = Price(price),

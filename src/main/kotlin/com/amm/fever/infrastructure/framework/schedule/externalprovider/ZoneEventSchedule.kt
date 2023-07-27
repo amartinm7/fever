@@ -1,9 +1,7 @@
 package com.amm.fever.infrastructure.framework.schedule.externalprovider
 
-import com.amm.fever.application.event.CreateEventService
-import com.amm.fever.application.event.CreateEventServiceRequest
-import com.amm.fever.application.zone.CreateZoneEventService
-import com.amm.fever.application.zone.CreateZoneEventServiceRequest
+import com.amm.fever.application.zone.create.CreateZoneEventService
+import com.amm.fever.application.zone.create.CreateZoneEventServiceRequest
 import java.util.UUID
 import kotlinx.coroutines.runBlocking
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock

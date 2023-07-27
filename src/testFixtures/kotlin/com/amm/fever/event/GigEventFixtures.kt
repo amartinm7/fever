@@ -21,7 +21,7 @@ import com.amm.fever.domain.vo.SellTo
 import com.amm.fever.domain.vo.SoldOut
 import com.amm.fever.domain.vo.StartAt
 import com.amm.fever.domain.vo.Title
-import com.amm.fever.domain.vo.Zone
+import com.amm.fever.domain.vo.ZoneVO
 import com.amm.fever.domain.vo.ZoneId
 import com.amm.fever.domain.vo.Zones
 import com.amm.fever.infrastructure.framework.event.controller.search.EventList
@@ -75,21 +75,21 @@ object GigEventFixtures {
             soldOut = SoldOut(ANY_SOLD_OUT),
             zones = Zones(
                 value = listOf(
-                    Zone(
+                    ZoneVO(
                         id = ZoneId(ANY_ZONE_ID),
                         capacity = Capacity(ANY_CAPACITY),
                         price = Price(ANY_PRICE),
                         zoneName = ZoneName(ANY_ZONE_NAME),
                         numbered = Numbered(ANY_NUMBERED)
                     ),
-                    Zone(
+                    ZoneVO(
                         id = ZoneId("38"),
                         capacity = Capacity(100L),
                         price = Price(15.00),
                         zoneName = ZoneName("Grada 2"),
                         numbered = Numbered(false)
                     ),
-                    Zone(
+                    ZoneVO(
                         id = ZoneId("30"),
                         capacity = Capacity(90L),
                         price = Price(30.00),

@@ -24,7 +24,7 @@ import com.amm.fever.domain.vo.SellTo
 import com.amm.fever.domain.vo.SoldOut
 import com.amm.fever.domain.vo.StartAt
 import com.amm.fever.domain.vo.Title
-import com.amm.fever.domain.vo.Zone
+import com.amm.fever.domain.vo.ZoneVO
 import com.amm.fever.domain.vo.ZoneId
 import com.amm.fever.domain.vo.Zones
 import com.amm.fever.infrastructure.event.repository.extprovider.dto.BaseEventType
@@ -90,9 +90,9 @@ class ExtProviderEventRepository(
             else -> Mono.error<EventUnprocessableEntityException>(EventUnprocessableEntityException(""))
         }.also { exception -> logger.warn(exception.toString()) }
 
-    private fun List<ZoneType>.toZones(): List<Zone> =
+    private fun List<ZoneType>.toZones(): List<ZoneVO> =
         map { zoneType ->
-            Zone(
+            ZoneVO(
                 id = ZoneId(zoneType.zoneId),
                 capacity = Capacity(zoneType.capacity.toLong()),
                 price = Price(zoneType.price.toDouble()),

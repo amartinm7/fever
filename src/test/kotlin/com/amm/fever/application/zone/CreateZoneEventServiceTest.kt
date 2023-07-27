@@ -1,22 +1,9 @@
 package com.amm.fever.application.zone
 
+import com.amm.fever.application.zone.create.CreateZoneEventService
+import com.amm.fever.application.zone.create.CreateZoneEventServiceRequest
+import com.amm.fever.application.zone.pubsubs.ZoneEventPublisher
 import com.amm.fever.domain.event.ProviderEventRepository
-import com.amm.fever.domain.vo.Audit
-import com.amm.fever.domain.vo.Capacity
-import com.amm.fever.domain.vo.CreatedAt
-import com.amm.fever.domain.vo.EndsAt
-import com.amm.fever.domain.vo.EventBaseId
-import com.amm.fever.domain.vo.EventId
-import com.amm.fever.domain.vo.Id
-import com.amm.fever.domain.vo.ModifiedAt
-import com.amm.fever.domain.vo.Numbered
-import com.amm.fever.domain.vo.Price
-import com.amm.fever.domain.vo.SoldOut
-import com.amm.fever.domain.vo.StartAt
-import com.amm.fever.domain.vo.Title
-import com.amm.fever.domain.vo.Version
-import com.amm.fever.domain.vo.ZoneId
-import com.amm.fever.domain.vo.ZoneName
 import com.amm.fever.domain.zone.Zone
 import com.amm.fever.domain.zone.ZoneEventEventRepository
 import com.amm.fever.event.PerformanceEventFixtures
@@ -26,8 +13,6 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
-import java.time.OffsetDateTime
-import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
@@ -43,6 +28,9 @@ class CreateZoneEventServiceTest {
     @MockK
     private lateinit var providerEventRepository: ProviderEventRepository
 
+    @MockK
+    private lateinit var zoneEventPublisher: ZoneEventPublisher
+
     @InjectMockKs
     private lateinit var createZoneEventService: CreateZoneEventService
 
@@ -50,8 +38,11 @@ class CreateZoneEventServiceTest {
     fun `should create a new zone`() = runBlocking {
         `mock the external provider repository call and returns a list of performance events`()
         `mock saving performance event on repository`()
+        `mock publish zone events`()
         createZoneEventService.execute(CreateZoneEventServiceRequest(UUID.randomUUID()))
         verify { zoneRepository.save(any<Zone>()) }
+        verify { runBlocking { providerEventRepository.findBy() } }
+        verify { runBlocking { zoneEventPublisher.publish(any()) } }
     }
 
     private fun `mock saving performance event on repository`() {
@@ -64,5 +55,13 @@ class CreateZoneEventServiceTest {
                 providerEventRepository.findBy()
             }
         } returns PerformanceEventFixtures.ANY_EVENTS
+    }
+
+    private fun `mock publish zone events`() {
+        every {
+            runBlocking {
+                zoneEventPublisher.publish(any())
+            }
+        } returns Unit
     }
 }
